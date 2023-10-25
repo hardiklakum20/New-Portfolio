@@ -1,0 +1,10 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+	font-family: Augestina;
+	src: url('assets/fonts/agustina_2/Agustina.otf');
+}

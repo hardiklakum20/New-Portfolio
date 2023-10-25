@@ -1,0 +1,119 @@
+/**
+ * Copyright 2023 Design Barn Inc.
+ */
+
+const baseUrl = window.location.origin;
+
+window.addEventListener('DOMContentLoaded', async (event) => {
+  const animationData = await parseQueryVariables();
+  const pageBackground = getBackgroundColorAndTheme(animationData.bg_color);
+
+  if (animationData.file === null) {
+    const contentDiv = document.getElementById('container');
+
+    contentDiv.innerHTML = `<img src="https://static.lottiefiles.com/images/logo/lottiefiles-logo.svg" alt="LottieFiles" class="center" />`;
+    console.error('Missing file parameter');
+  }
+
+  if (animationData.file !== null) {
+    // Load Animation
+
+    const player = document.querySelector('dotlottie-player');
+
+    player.load(animationData.file);
+
+    // Set page background color
+    const rootElement = document.documentElement;
+
+    rootElement.style.backgroundColor = pageBackground.backgroundColor;
+  }
+});
+
+async function parseQueryVariables() {
+  let data = {};
+  const searchParams = new URLSearchParams(window.location.search);
+
+  const file = searchParams.get('file');
+  const fileKey = file.split('/')[0];
+
+  const metadata = await getAnimationMetadata(fileKey);
+
+  data = {
+    file: `${baseUrl}/${file}`,
+    ...metadata,
+  };
+
+  return data;
+}
+
+function getBackgroundColorAndTheme(color) {
+  const data = { backgroundColor: 'transparent', theme: 'light' };
+
+  if (!color) {
+    return data;
+  }
+
+  // var color = `#${color.toLowerCase()}`;
+
+  if (color !== '#ffffff') {
+    data.backgroundColor = hex2rgba(color);
+    data.theme = lightOrDark(color) === 'light' ? 'light' : 'dark';
+
+    return data;
+  }
+
+  return data;
+}
+
+function lightOrDark(color) {
+  // Check the format of the color, HEX or RGB?
+  if (color.match(/^rgb/)) {
+    // If HEX --> store the red, green, blue values in separate variables
+    color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/);
+
+    r = color[1];
+    g = color[2];
+    b = color[3];
+  } else {
+    // If RGB --> Convert it to HEX: http://gist.github.com/983661
+    color = Number(`0x${color.slice(1).replace(color.length < 5 && /./g, '$&$&')}`);
+
+    r = color >> 16;
+    g = (color >> 8) & 255;
+    b = color & 255;
+  }
+
+  // HSP equation from http://alienryderflex.com/hsp.html
+  hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+
+  // Using the HSP value, determine whether the color is light or dark
+  if (hsp > 127.5) {
+    return 'light';
+  } else {
+    return 'dark';
+  }
+}
+
+function hex2rgba(hex, alpha = 1) {
+  const [r, g, b] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
+
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+async function getAnimationMetadata(fileKey) {
+  const url = `${baseUrl}/${fileKey}/metadata.json`;
+  const meta = {};
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    meta.author_name = data.author;
+    meta.author_url = data.authorUrl;
+    meta.bg_color = data.backgroundColor;
+
+    return meta;
+  } catch (error) {
+    console.error(`Error fetching metadata: ${error}`);
+  }
+}
