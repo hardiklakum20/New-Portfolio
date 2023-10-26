@@ -17561,7 +17561,9 @@ textarea[resize="horizontal"] {
 		margin: 0.7rem;
 		overflow-y: auto;
 		height: auto !important;
-		opacity: 0;
+		opacity: 1;
+		padding: 15px;
+		background: white;
 	}
 	.navbar-collapse .navbar-toggler {
 		width: 20px;
