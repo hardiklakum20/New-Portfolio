@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="library.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome.min.css" />
     <link rel="shortcut icon" href="assets/img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/floating-wpp.min.css">
+
     <!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css"> -->
 </head>
 
@@ -30,12 +32,12 @@
                                 <div class="collapse-brand col-6">
                                     <h3 class="text-black" id="nav-title">Hardik lakum</h3>
                                 </div>
-                                <!-- <div class="collapse-close col-6">
+                                <div class="collapse-close col-6">
                                     <button class="navbar-toggler" id="navbar_global">
                                         <span></span>
                                         <span></span>
                                     </button>
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                         <ul class="align-items-lg-center ml-lg-auto navbar-nav">
@@ -596,16 +598,36 @@
         </div>
     </div>
 </div>
-</body>
+<div id="myDiv"></div>
+  </body>
+
 
 </html>
 <script src="assets/lottie/lottie-player-main.js"></script>
 <script src="assets/fonts/icon.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/jquery-3.7.1.min.js"></script>
+<!-- <script type="text/javascript" src="jquery-3.3.1.min.js"></script> -->
+<script type="text/javascript" src="assets/js/floating-wpp.min.js"></script>
 
 <script>
     $("#navbar_global").click(function(){
   $(".navbar-collapse").toggle();
 });
+$(".collapse-close").click(function(){
+  $(".navbar-collapse").toggle();
+});
 </script>
+<script type="text/javascript">
+    $(function () {
+      $('#myDiv').floatingWhatsApp({
+        phone: '8140726472',
+        popupMessage: 'Hello, how can we help you?',
+        showPopup: true,
+        headerTitle: 'Welcome!',
+        message: "It's Great !",
+        position:'right',
+        autoOpenTimeout:'5100'
+      });
+    });
+  </script>
