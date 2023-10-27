@@ -142,3 +142,12 @@
   from{border-right-color: rgba(255,255,255,.75);}
   to{border-right-color: transparent;}
 }
+
+@media only screen and (max-width:575px) {
+  [tooltip][flow^="down"]::before, [tooltip][flow^="down"]::after {
+    left: 50%;
+}
+.card-body {
+  padding: 0.8em !important;
+}
+}
